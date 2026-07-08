@@ -1,54 +1,47 @@
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Badge from '@mui/material/Badge';
-import Stack from '@mui/material/Stack';
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-import StorefrontIcon from '@mui/icons-material/Storefront';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
+import './Header.scss';
 
 export function Header() {
+  const navigate = useNavigate();
   const { totalCount } = useCart();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
-    <AppBar position="static" color="default" elevation={0} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Box
-          component={RouterLink}
-          to="/"
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 40,
-            height: 40,
-            borderRadius: 1,
-            bgcolor: 'action.hover',
-            color: 'action.active',
-          }}
-        >
-          <ImageOutlinedIcon fontSize="small" />
-        </Box>
-        <Stack direction="row" spacing={1}>
-          <Button component={RouterLink} to="/" startIcon={<StorefrontIcon />}>
+    <header className="header">
+      <div className="header__toolbar">
+        <Link to="/login" className="header__logo-placeholder" aria-label="Логотип">
+          <span className="header__logo-mark" />
+        </Link>
+        <nav className="header__nav">
+          <Link to="/catalog" className="header__nav-button">
             Каталог
-          </Button>
-          <Button
-            component={RouterLink}
+          </Link>
+          <Link
             to="/cart"
-            startIcon={
-              <Badge badgeContent={totalCount} color="primary">
-                <ShoppingCartIcon />
-              </Badge>
-            }
+            className={`header__nav-button header__cart-button${totalCount > 0 ? ' header__cart-button--with-badge' : ''}`}
           >
             Корзина
-          </Button>
-        </Stack>
-      </Toolbar>
-    </AppBar>
+            {totalCount > 0 && <span className="header__badge">{totalCount}</span>}
+          </Link>
+          {user ? (
+            <div className="header__user">
+              <span className={`header__role header__role--${user.role}`}>
+                {user.login}
+              </span>
+              <button type="button" className="header__nav-button" onClick={handleLogout}>
+                Выйти
+              </button>
+            </div>
+          ) : null}
+        </nav>
+      </div>
+    </header>
   );
 }

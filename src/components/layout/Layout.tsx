@@ -1,15 +1,17 @@
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from './Header';
+import './Layout.scss';
 
 export function Layout() {
+  const { pathname } = useLocation();
+  const isAuthPage = pathname === '/register' || pathname === '/login';
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}>
-      <Header />
-      <Container component="main" sx={{ flex: 1, py: 4 }}>
+    <div className="layout">
+      {!isAuthPage && <Header />}
+      <main className="layout__content">
         <Outlet />
-      </Container>
-    </Box>
+      </main>
+    </div>
   );
 }

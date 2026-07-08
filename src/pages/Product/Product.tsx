@@ -1,11 +1,9 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { products } from '../../data/products';
 import { formatPrice } from '../../utils/formatPrice';
 import { useCart } from '../../hooks/useCart';
 import { ProductImagePlaceholder } from '../../components/product/ProductImagePlaceholder';
+import './Product.scss';
 
 export function Product() {
   const { id } = useParams<{ id: string }>();
@@ -15,31 +13,25 @@ export function Product() {
   if (!product) {
     return (
       <section>
-        <Typography gutterBottom>Товар не найден.</Typography>
-        <Button component={RouterLink} to="/">
+        <p>Товар не найден.</p>
+        <Link to="/catalog" className="product-page__back-link">
           Вернуться в каталог
-        </Button>
+        </Link>
       </section>
     );
   }
 
   return (
-    <Box sx={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-      <ProductImagePlaceholder sx={{ width: 240, height: 240, borderRadius: 2 }} iconSize={72} />
-      <Box sx={{ flex: 1, minWidth: 240 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          {product.title}
-        </Typography>
-        <Typography color="text.secondary" gutterBottom>
-          {product.description}
-        </Typography>
-        <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
-          {formatPrice(product.price)}
-        </Typography>
-        <Button variant="contained" onClick={() => addItem(product)}>
+    <section className="product-page">
+      <ProductImagePlaceholder variant="detail" />
+      <div className="product-page__content">
+        <h1 className="product-page__title">{product.title}</h1>
+        <p className="product-page__description">{product.description}</p>
+        <p className="product-page__price">{formatPrice(product.price)}</p>
+        <button type="button" className="product-page__button" onClick={() => addItem(product)}>
           В корзину
-        </Button>
-      </Box>
-    </Box>
+        </button>
+      </div>
+    </section>
   );
 }

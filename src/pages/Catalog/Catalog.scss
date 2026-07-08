@@ -1,0 +1,16 @@
+.catalog-title {
+  margin: 0 0 16px;
+  font-size: 34px;
+  font-weight: 500;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.catalog-grid__item {
+  min-width: 0;
+}

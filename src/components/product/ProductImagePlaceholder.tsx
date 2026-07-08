@@ -1,25 +1,13 @@
-import Box from '@mui/material/Box';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-import type { SxProps, Theme } from '@mui/material/styles';
+import './ProductImagePlaceholder.scss';
 
 interface ProductImagePlaceholderProps {
-  sx?: SxProps<Theme>;
-  iconSize?: number;
+  variant?: 'card' | 'detail' | 'cart';
 }
 
-export function ProductImagePlaceholder({ sx, iconSize = 48 }: ProductImagePlaceholderProps) {
+export function ProductImagePlaceholder({ variant = 'card' }: ProductImagePlaceholderProps) {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        bgcolor: 'action.hover',
-        color: 'action.active',
-        ...sx,
-      }}
-    >
-      <Inventory2OutlinedIcon sx={{ fontSize: iconSize }} />
-    </Box>
+    <div className={`product-image-placeholder product-image-placeholder--${variant}`}>
+      <span className="product-image-placeholder__icon" />
+    </div>
   );
 }

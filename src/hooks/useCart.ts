@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux';
 import {
   addItem as addCartItem,
   clear as clearCart,
@@ -8,11 +7,8 @@ import {
   selectCartTotalCount,
   selectCartTotalPrice,
 } from '../store/cartSlice';
-import type { AppDispatch, RootState } from '../store/store';
 import type { Product } from '../types/product';
-
-export const useAppDispatch = () => useDispatch<AppDispatch>();
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+import { useAppDispatch, useAppSelector } from './useStore';
 
 export function useCart() {
   const dispatch = useAppDispatch();
