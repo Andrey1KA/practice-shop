@@ -10,7 +10,7 @@ export function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!email.trim() || !password.trim()) {
@@ -18,14 +18,18 @@ export function SignIn() {
       return;
     }
 
-    const isLoggedIn = login(email, password);
+    try {
+      const isLoggedIn = await login(email, password);
 
-    if (!isLoggedIn) {
-      setError('Неверно заполнена почта или пароль');
-      return;
+      if (!isLoggedIn) {
+        setError('Неверно заполнена почта или пароль');
+        return;
+      }
+
+      navigate('/catalog');
+    } catch {
+      setError('Не удалось выполнить вход');
     }
-
-    navigate('/catalog');
   };
 
   return (

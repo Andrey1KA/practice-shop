@@ -11,7 +11,7 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleRegister = (event: FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!email.trim() || !login.trim() || !password.trim()) {
@@ -19,14 +19,18 @@ export function Login() {
       return;
     }
 
-    const isRegistered = register(email, login, password);
+    try {
+      const isRegistered = await register(email, login, password);
 
-    if (!isRegistered) {
-      setError('Пользователь с таким email или логином уже зарегистрирован');
-      return;
+      if (!isRegistered) {
+        setError('Пользователь с таким email или логином уже зарегистрирован');
+        return;
+      }
+
+      navigate('/catalog');
+    } catch {
+      setError('Не удалось выполнить регистрацию');
     }
-
-    navigate('/catalog');
   };
 
   return (

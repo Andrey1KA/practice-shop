@@ -5,6 +5,7 @@ import { Product } from './pages/Product/Product';
 import { Cart } from './pages/Cart/Cart';
 import { Login } from './pages/Login/Login';
 import { SignIn } from './pages/SignIn/SignIn';
+import { AddProduct } from './pages/AddProduct/AddProduct';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route element={<Layout />}>
         <Route index element={<Navigate to="/login" replace />} />
         <Route path="catalog" element={<Catalog />} />
+        <Route path="add-product" element={<AddProduct />} />
         <Route path="product/:id" element={<Product />} />
         <Route path="cart" element={<Cart />} />
         <Route path="login" element={<SignIn />} />

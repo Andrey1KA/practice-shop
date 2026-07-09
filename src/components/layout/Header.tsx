@@ -6,7 +6,7 @@ import './Header.scss';
 export function Header() {
   const navigate = useNavigate();
   const { totalCount } = useCart();
-  const { user, logout } = useAuth();
+  const { user, role, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -23,6 +23,11 @@ export function Header() {
           <Link to="/catalog" className="header__nav-button">
             Каталог
           </Link>
+          {role === 'admin' && (
+            <Link to="/add-product" className="header__nav-button">
+              Добавить товар
+            </Link>
+          )}
           <Link
             to="/cart"
             className={`header__nav-button header__cart-button${totalCount > 0 ? ' header__cart-button--with-badge' : ''}`}

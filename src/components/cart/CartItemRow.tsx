@@ -1,7 +1,7 @@
 import type { CartItem } from '../../types/cart';
 import { formatPrice } from '../../utils/formatPrice';
 import { useCart } from '../../hooks/useCart';
-import { ProductImagePlaceholder } from '../product/ProductImagePlaceholder';
+import { ProductImage } from '../product/ProductImage';
 import './CartItemRow.scss';
 
 export function CartItemRow({ item }: { item: CartItem }) {
@@ -10,7 +10,7 @@ export function CartItemRow({ item }: { item: CartItem }) {
   return (
     <>
       <div className="cart-item">
-        <ProductImagePlaceholder variant="cart" />
+        <ProductImage image={item.product.image} title={item.product.title} variant="cart" />
         <div className="cart-item__info">
           <p className="cart-item__title">{item.product.title}</p>
           <p className="cart-item__meta">
@@ -19,7 +19,7 @@ export function CartItemRow({ item }: { item: CartItem }) {
         </div>
         <button type="button" className="cart-item__remove" onClick={() => removeItem(item.product.id)}>
           Удалить
-        </button>
+        </button> 
       </div>
       <hr className="cart-item__divider" />
     </>

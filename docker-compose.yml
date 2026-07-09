@@ -1,0 +1,26 @@
+services:
+  api:
+    build:
+      context: ./server
+    environment:
+      PORT: 3001
+      JWT_SECRET: shop-dev-secret
+      DATA_DIR: /app/data
+      DATABASE_PATH: /app/data/shop.db
+      UPLOADS_PATH: /app/data/uploads
+    volumes:
+      - shop-data:/app/data
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  shop-data:

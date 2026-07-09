@@ -1,8 +1,10 @@
-import { products } from '../../data/products';
+import { useProducts } from '../../hooks/useProducts';
 import { ProductCard } from '../../components/product/ProductCard';
 import './Catalog.scss';
 
 export function Catalog() {
+  const { products } = useProducts();
+
   return (
     <section>
       <h1 className="catalog-title">Каталог</h1>

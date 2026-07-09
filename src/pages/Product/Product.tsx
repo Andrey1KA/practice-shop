@@ -1,13 +1,14 @@
 import { Link, useParams } from 'react-router-dom';
-import { products } from '../../data/products';
 import { formatPrice } from '../../utils/formatPrice';
 import { useCart } from '../../hooks/useCart';
-import { ProductImagePlaceholder } from '../../components/product/ProductImagePlaceholder';
+import { useProducts } from '../../hooks/useProducts';
+import { ProductImage } from '../../components/product/ProductImage';
 import './Product.scss';
 
 export function Product() {
   const { id } = useParams<{ id: string }>();
   const { addItem } = useCart();
+  const { products } = useProducts();
   const product = products.find((item) => item.id === id);
 
   if (!product) {
@@ -23,7 +24,7 @@ export function Product() {
 
   return (
     <section className="product-page">
-      <ProductImagePlaceholder variant="detail" />
+      <ProductImage image={product.image} title={product.title} variant="detail" />
       <div className="product-page__content">
         <h1 className="product-page__title">{product.title}</h1>
         <p className="product-page__description">{product.description}</p>

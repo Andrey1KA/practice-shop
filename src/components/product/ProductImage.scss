@@ -1,0 +1,30 @@
+.product-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.product-image--card {
+  height: 140px;
+}
+
+.product-image--detail {
+  width: 240px;
+  height: 240px;
+  border-radius: 16px;
+}
+
+.product-image--cart {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+}
+
+.product-image__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

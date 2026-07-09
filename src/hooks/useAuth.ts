@@ -1,12 +1,11 @@
 import { useCallback } from 'react';
-import { saveMockUsers } from '../data/mockUsers';
+import { ApiError } from '../api/client';
+import { loginRequest, registerRequest } from '../api/auth';
 import {
   loginUser,
   logout as logoutUser,
-  registerUser,
   selectAuthUser,
   selectIsAuthenticated,
-  selectRegisteredUsers,
   selectUserRole,
 } from '../store/authSlice';
 import { useAppDispatch, useAppSelector } from './useStore';
@@ -15,59 +14,40 @@ export function useAuth() {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectAuthUser);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const users = useAppSelector(selectRegisteredUsers);
   const role = useAppSelector(selectUserRole);
 
   const register = useCallback(
-    (email: string, login: string, password: string) => {
-      const normalizedEmail = email.trim().toLowerCase();
-      const normalizedLogin = login.trim().toLowerCase();
-      const isUserTaken = users.some(
-        (registeredUser) =>
-          registeredUser.email === normalizedEmail || registeredUser.login === normalizedLogin,
-      );
+    async (email: string, login: string, password: string) => {
+      try {
+        const response = await registerRequest(email, login, password);
+        dispatch(loginUser(response));
+        return true;
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 409) {
+          return false;
+        }
 
-      if (isUserTaken) {
-        return false;
+        throw error;
       }
-
-      const newUser = {
-        email: normalizedEmail,
-        login: normalizedLogin,
-        password,
-        role: 'user',
-        name: 'Пользователь',
-      } as const;
-
-      dispatch(registerUser(newUser));
-      saveMockUsers([...users, newUser]);
-      return true;
     },
-    [dispatch, users],
+    [dispatch],
   );
 
   const login = useCallback(
-    (loginOrEmail: string, password: string) => {
-      const normalizedLoginOrEmail = loginOrEmail.trim().toLowerCase();
-      const registeredUser = users.find(
-        (storedUser) =>
-          (storedUser.email === normalizedLoginOrEmail || storedUser.login === normalizedLoginOrEmail) &&
-          storedUser.password === password,
-      );
+    async (loginOrEmail: string, password: string) => {
+      try {
+        const response = await loginRequest(loginOrEmail, password);
+        dispatch(loginUser(response));
+        return true;
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 401) {
+          return false;
+        }
 
-      if (!registeredUser) {
-        return false;
+        throw error;
       }
-
-      dispatch(loginUser({
-        email: registeredUser.email,
-        login: registeredUser.login,
-        role: registeredUser.role,
-        name: registeredUser.name,
-      }));
-      return true;
     },
-    [dispatch, users],
+    [dispatch],
   );
 
   const logout = useCallback(() => {
@@ -81,6 +61,5 @@ export function useAuth() {
     login,
     logout,
     register,
-    users,
   };
 }

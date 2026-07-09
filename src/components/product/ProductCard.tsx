@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import type { Product } from '../../types/product';
 import { formatPrice } from '../../utils/formatPrice';
 import { useCart } from '../../hooks/useCart';
-import { ProductImagePlaceholder } from './ProductImagePlaceholder';
+import { ProductImage } from './ProductImage';
 import './ProductCard.scss';
 
 export function ProductCard({ product }: { product: Product }) {
@@ -11,7 +11,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="product-card">
       <Link to={`/product/${product.id}`} className="product-card__link">
-        <ProductImagePlaceholder />
+        <ProductImage image={product.image} title={product.title} />
         <div className="product-card__content">
           <h3 className="product-card__title">{product.title}</h3>
           <p className="product-card__price">{formatPrice(product.price)}</p>
