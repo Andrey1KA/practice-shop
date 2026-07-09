@@ -1,12 +1,24 @@
 import { Link } from 'react-router-dom';
 import type { Product } from '../../types/product';
 import { formatPrice } from '../../utils/formatPrice';
+import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
+import { useProducts } from '../../hooks/useProducts';
 import { ProductImage } from './ProductImage';
 import './ProductCard.scss';
 
 export function ProductCard({ product }: { product: Product }) {
+  const { role } = useAuth();
   const { addItem } = useCart();
+  const { deleteProduct } = useProducts();
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Удалить товар «${product.title}»?`)) {
+      return;
+    }
+
+    await deleteProduct(product.id);
+  };
 
   return (
     <article className="product-card">
@@ -21,6 +33,11 @@ export function ProductCard({ product }: { product: Product }) {
         <button type="button" className="product-card__button" onClick={() => addItem(product)}>
           В корзину
         </button>
+        {role === 'admin' && (
+          <button type="button" className="product-card__button product-card__button--danger" onClick={handleDelete}>
+            Удалить
+          </button>
+        )}
       </div>
     </article>
   );

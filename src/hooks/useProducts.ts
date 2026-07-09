@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { createProductRequest, fetchProducts } from '../api/products';
-import { addProduct, selectProducts, setProducts } from '../store/productsSlice';
+import { createProductRequest, deleteProductRequest, fetchProducts } from '../api/products';
+import { addProduct, removeProduct, selectProducts, setProducts } from '../store/productsSlice';
 import { useAppDispatch, useAppSelector } from './useStore';
 
 export function useProducts() {
@@ -21,8 +21,17 @@ export function useProducts() {
     [dispatch],
   );
 
+  const deleteProduct = useCallback(
+    async (id: string) => {
+      await deleteProductRequest(id);
+      dispatch(removeProduct(id));
+    },
+    [dispatch],
+  );
+
   return {
     createProduct,
+    deleteProduct,
     loadProducts,
     products,
   };

@@ -29,6 +29,9 @@
 }
 
 .product-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-top: auto;
   padding: 0 16px 16px;
 }
@@ -44,5 +47,13 @@
 
   &:hover {
     background: var(--color-primary-dark);
+  }
+}
+
+.product-card__button--danger {
+  background: var(--color-danger);
+
+  &:hover {
+    background: #b71c1c;
   }
 }

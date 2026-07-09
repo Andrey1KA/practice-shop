@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import multer from 'multer';
@@ -63,6 +64,28 @@ export function createProductsRouter(db: ShopDatabase, jwtSecret: string, upload
     const row = db.prepare('SELECT * FROM products WHERE id = ?').get(id) as DbProductRow;
 
     res.status(201).json(mapProduct(row));
+  });
+
+  router.delete('/:id', authMiddleware, adminMiddleware, (req, res) => {
+    const { id } = req.params;
+    const row = db.prepare('SELECT * FROM products WHERE id = ?').get(id) as DbProductRow | undefined;
+
+    if (!row) {
+      res.status(404).json({ message: 'Товар не найден' });
+      return;
+    }
+
+    if (row.image_path?.startsWith('/uploads/')) {
+      const filePath = path.join(uploadsPath, path.basename(row.image_path));
+
+      try {
+        fs.unlinkSync(filePath);
+      } catch {
+      }
+    }
+
+    db.prepare('DELETE FROM products WHERE id = ?').run(id);
+    res.status(204).send();
   });
 
   router.use((error: unknown, _req: Request, res: Response, next: NextFunction) => {

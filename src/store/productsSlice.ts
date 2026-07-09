@@ -20,10 +20,13 @@ export const productsSlice = createSlice({
     addProduct: (state, action: PayloadAction<Product>) => {
       state.items.unshift(action.payload);
     },
+    removeProduct: (state, action: PayloadAction<string>) => {
+      state.items = state.items.filter((product) => product.id !== action.payload);
+    },
   },
 });
 
-export const { addProduct, setProducts } = productsSlice.actions;
+export const { addProduct, removeProduct, setProducts } = productsSlice.actions;
 
 export const selectProducts = (state: RootState) => state.products.items;
 
