@@ -5,6 +5,7 @@ import express from 'express';
 import { initDb } from './db.js';
 import { createAuthRouter } from './routes/auth.js';
 import { createProductsRouter } from './routes/products.js';
+import { createReviewsRouter } from './routes/reviews.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.PORT ?? 3001);
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use('/uploads', express.static(uploadsPath));
 app.use('/api/auth', createAuthRouter(db, jwtSecret));
 app.use('/api/products', createProductsRouter(db, jwtSecret, uploadsPath));
+app.use('/api/products/:productId/reviews', createReviewsRouter(db, jwtSecret));
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });

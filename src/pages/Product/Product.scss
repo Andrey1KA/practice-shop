@@ -26,6 +26,12 @@
   font-weight: 600;
 }
 
+.product-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .product-page__button,
 .product-page__back-link {
   display: inline-flex;
@@ -41,5 +47,14 @@
 
   &:hover {
     background: var(--color-primary-dark);
+  }
+}
+
+.product-page__button--secondary {
+  color: var(--color-primary);
+  background: var(--color-soft);
+
+  &:hover {
+    background: rgba(25, 118, 210, 0.12);
   }
 }

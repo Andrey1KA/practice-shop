@@ -29,9 +29,14 @@ export function Product() {
         <h1 className="product-page__title">{product.title}</h1>
         <p className="product-page__description">{product.description}</p>
         <p className="product-page__price">{formatPrice(product.price)}</p>
-        <button type="button" className="product-page__button" onClick={() => addItem(product)}>
-          В корзину
-        </button>
+        <div className="product-page__actions">
+          <button type="button" className="product-page__button" onClick={() => addItem(product)}>
+            В корзину
+          </button>
+          <Link to={`/product/${product.id}/reviews`} className="product-page__button product-page__button--secondary">
+            Отзывы
+          </Link>
+        </div>
       </div>
     </section>
   );

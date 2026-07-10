@@ -46,6 +46,16 @@ export function initDb(databasePath: string, uploadsPath: string) {
       description TEXT NOT NULL,
       image_path TEXT
     );
+
+    CREATE TABLE IF NOT EXISTS reviews (
+      id TEXT PRIMARY KEY,
+      product_id TEXT NOT NULL,
+      user_login TEXT NOT NULL,
+      rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+      comment TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      UNIQUE (product_id, user_login)
+    );
   `);
 
   seedUsers(db);

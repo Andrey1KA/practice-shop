@@ -7,6 +7,7 @@ import { Login } from './pages/Login/Login';
 import { SignIn } from './pages/SignIn/SignIn';
 import { AddProduct } from './pages/AddProduct/AddProduct';
 import { Profile } from './pages/Profile/Profile';
+import { ProductReviews } from './pages/ProductReviews/ProductReviews';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route index element={<Navigate to="/login" replace />} />
         <Route path="catalog" element={<Catalog />} />
         <Route path="add-product" element={<AddProduct />} />
+        <Route path="product/:id/reviews" element={<ProductReviews />} />
         <Route path="product/:id" element={<Product />} />
         <Route path="cart" element={<Cart />} />
         <Route path="profile" element={<Profile />} />
