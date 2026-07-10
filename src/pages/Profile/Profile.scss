@@ -1,0 +1,111 @@
+.profile-page {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.profile-card__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 24px 24px;
+  background: linear-gradient(180deg, var(--color-soft) 0%, var(--color-surface) 100%);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.profile-card__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--color-primary);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.profile-card__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.profile-card__role {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.profile-card__role--admin {
+  color: var(--color-primary);
+  background: rgba(25, 118, 210, 0.12);
+}
+
+.profile-card__role--user {
+  color: var(--color-muted);
+  background: rgba(107, 114, 128, 0.12);
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-info__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.profile-info__label {
+  flex-shrink: 0;
+  min-width: 88px;
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.profile-info__value {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 500;
+  text-align: right;
+  word-break: break-word;
+}
+
+.profile-info__badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.profile-info__badge--admin {
+  color: var(--color-primary);
+  background: rgba(25, 118, 210, 0.12);
+}
+
+.profile-info__badge--user {
+  color: var(--color-muted);
+  background: rgba(107, 114, 128, 0.12);
+}

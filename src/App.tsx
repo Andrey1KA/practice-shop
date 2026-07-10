@@ -6,6 +6,7 @@ import { Cart } from './pages/Cart/Cart';
 import { Login } from './pages/Login/Login';
 import { SignIn } from './pages/SignIn/SignIn';
 import { AddProduct } from './pages/AddProduct/AddProduct';
+import { Profile } from './pages/Profile/Profile';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="add-product" element={<AddProduct />} />
         <Route path="product/:id" element={<Product />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="profile" element={<Profile />} />
         <Route path="login" element={<SignIn />} />
         <Route path="register" element={<Login />} />
       </Route>

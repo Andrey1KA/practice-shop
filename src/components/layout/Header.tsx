@@ -37,9 +37,9 @@ export function Header() {
           </Link>
           {user ? (
             <div className="header__user">
-              <span className={`header__role header__role--${user.role}`}>
+              <Link to="/profile" className={`header__role header__role--${user.role}`}>
                 {user.login}
-              </span>
+              </Link>
               <button type="button" className="header__nav-button" onClick={handleLogout}>
                 Выйти
               </button>
