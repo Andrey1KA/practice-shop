@@ -58,3 +58,11 @@
     background: rgba(25, 118, 210, 0.12);
   }
 }
+
+.product-page__button--danger {
+  background: var(--color-danger);
+
+  &:hover {
+    background: #b71c1c;
+  }
+}

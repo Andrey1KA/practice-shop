@@ -50,6 +50,19 @@
   }
 }
 
+.product-card__button--secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  background: transparent;
+
+  &:hover {
+    background: var(--color-soft);
+  }
+}
+
 .product-card__button--danger {
   background: var(--color-danger);
 

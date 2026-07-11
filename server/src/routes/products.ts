@@ -66,6 +66,49 @@ export function createProductsRouter(db: ShopDatabase, jwtSecret: string, upload
     res.status(201).json(mapProduct(row));
   });
 
+  router.put('/:id', authMiddleware, adminMiddleware, upload.single('image'), (req, res) => {
+    const { id } = req.params;
+    const row = db.prepare('SELECT * FROM products WHERE id = ?').get(id) as DbProductRow | undefined;
+
+    if (!row) {
+      res.status(404).json({ message: 'Товар не найден' });
+      return;
+    }
+
+    const title = String(req.body.title ?? '').trim();
+    const description = String(req.body.description ?? '').trim();
+    const price = Number(req.body.price);
+
+    if (!title || !description || Number.isNaN(price) || price <= 0) {
+      res.status(400).json({ message: 'Заполните название, описание и корректную цену' });
+      return;
+    }
+
+    let imagePath = row.image_path;
+
+    if (req.file) {
+      if (row.image_path?.startsWith('/uploads/')) {
+        const oldFilePath = path.join(uploadsPath, path.basename(row.image_path));
+
+        try {
+          fs.unlinkSync(oldFilePath);
+        } catch {
+        }
+      }
+
+      imagePath = `/uploads/${req.file.filename}`;
+    }
+
+    db.prepare(`
+      UPDATE products
+      SET title = ?, price = ?, description = ?, image_path = ?
+      WHERE id = ?
+    `).run(title, price, description, imagePath, id);
+
+    const updated = db.prepare('SELECT * FROM products WHERE id = ?').get(id) as DbProductRow;
+    res.json(mapProduct(updated));
+  });
+
   router.delete('/:id', authMiddleware, adminMiddleware, (req, res) => {
     const { id } = req.params;
     const row = db.prepare('SELECT * FROM products WHERE id = ?').get(id) as DbProductRow | undefined;

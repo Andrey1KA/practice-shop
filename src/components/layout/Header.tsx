@@ -28,13 +28,15 @@ export function Header() {
               Добавить товар
             </Link>
           )}
-          <Link
-            to="/cart"
-            className={`header__nav-button header__cart-button${totalCount > 0 ? ' header__cart-button--with-badge' : ''}`}
-          >
-            Корзина
-            {totalCount > 0 && <span className="header__badge">{totalCount}</span>}
-          </Link>
+          {role !== 'admin' && (
+            <Link
+              to="/cart"
+              className={`header__nav-button header__cart-button${totalCount > 0 ? ' header__cart-button--with-badge' : ''}`}
+            >
+              Корзина
+              {totalCount > 0 && <span className="header__badge">{totalCount}</span>}
+            </Link>
+          )}
           {user ? (
             <div className="header__user">
               <Link to="/profile" className={`header__role header__role--${user.role}`}>

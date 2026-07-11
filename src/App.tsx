@@ -6,6 +6,7 @@ import { Cart } from './pages/Cart/Cart';
 import { Login } from './pages/Login/Login';
 import { SignIn } from './pages/SignIn/SignIn';
 import { AddProduct } from './pages/AddProduct/AddProduct';
+import { EditProduct } from './pages/EditProduct/EditProduct';
 import { Profile } from './pages/Profile/Profile';
 import { ProductReviews } from './pages/ProductReviews/ProductReviews';
 import { Payment } from './pages/Payment/Payment';
@@ -17,6 +18,7 @@ function App() {
         <Route index element={<Navigate to="/login" replace />} />
         <Route path="catalog" element={<Catalog />} />
         <Route path="add-product" element={<AddProduct />} />
+        <Route path="product/:id/edit" element={<EditProduct />} />
         <Route path="product/:id/reviews" element={<ProductReviews />} />
         <Route path="product/:id" element={<Product />} />
         <Route path="cart" element={<Cart />} />

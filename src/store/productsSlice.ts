@@ -23,10 +23,17 @@ export const productsSlice = createSlice({
     removeProduct: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((product) => product.id !== action.payload);
     },
+    updateProduct: (state, action: PayloadAction<Product>) => {
+      const index = state.items.findIndex((product) => product.id === action.payload.id);
+
+      if (index !== -1) {
+        state.items[index] = action.payload;
+      }
+    },
   },
 });
 
-export const { addProduct, removeProduct, setProducts } = productsSlice.actions;
+export const { addProduct, removeProduct, setProducts, updateProduct } = productsSlice.actions;
 
 export const selectProducts = (state: RootState) => state.products.items;
 

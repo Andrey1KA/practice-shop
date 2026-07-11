@@ -11,6 +11,7 @@ export function ProductCard({ product }: { product: Product }) {
   const { role } = useAuth();
   const { addItem } = useCart();
   const { deleteProduct } = useProducts();
+  const isAdmin = role === 'admin';
 
   const handleDelete = async () => {
     if (!window.confirm(`Удалить товар «${product.title}»?`)) {
@@ -30,10 +31,16 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </Link>
       <div className="product-card__actions">
-        <button type="button" className="product-card__button" onClick={() => addItem(product)}>
-          В корзину
-        </button>
-        {role === 'admin' && (
+        {isAdmin ? (
+          <Link to={`/product/${product.id}/edit`} className="product-card__button product-card__button--secondary">
+            Редактировать
+          </Link>
+        ) : (
+          <button type="button" className="product-card__button" onClick={() => addItem(product)}>
+            В корзину
+          </button>
+        )}
+        {isAdmin && (
           <button type="button" className="product-card__button product-card__button--danger" onClick={handleDelete}>
             Удалить
           </button>

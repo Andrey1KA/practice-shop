@@ -1,24 +1,27 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
+import type { Product } from '../../types/product';
 import { useProducts } from '../../hooks/useProducts';
 import './AdminProductForm.scss';
 
 type AdminProductFormProps = {
+  product?: Product;
   onSuccess?: () => void;
 };
 
-export function AdminProductForm({ onSuccess }: AdminProductFormProps) {
-  const { createProduct } = useProducts();
-  const [title, setTitle] = useState('');
-  const [price, setPrice] = useState('');
-  const [description, setDescription] = useState('');
+export function AdminProductForm({ product, onSuccess }: AdminProductFormProps) {
+  const { createProduct, updateProduct } = useProducts();
+  const isEditMode = Boolean(product);
+  const [title, setTitle] = useState(product?.title ?? '');
+  const [price, setPrice] = useState(product ? String(product.price) : '');
+  const [description, setDescription] = useState(product?.description ?? '');
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [previewUrl, setPreviewUrl] = useState(product?.image ?? '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
     setImageFile(file);
-    setPreviewUrl(file ? URL.createObjectURL(file) : '');
+    setPreviewUrl(file ? URL.createObjectURL(file) : product?.image ?? '');
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -42,7 +45,12 @@ export function AdminProductForm({ onSuccess }: AdminProductFormProps) {
     setIsSubmitting(true);
 
     try {
-      await createProduct(formData);
+      if (isEditMode && product) {
+        await updateProduct(product.id, formData);
+      } else {
+        await createProduct(formData);
+      }
+
       onSuccess?.();
     } finally {
       setIsSubmitting(false);
@@ -91,7 +99,7 @@ export function AdminProductForm({ onSuccess }: AdminProductFormProps) {
       {previewUrl && <img src={previewUrl} alt="Предпросмотр товара" className="admin-product-form__preview" />}
 
       <button type="submit" className="admin-product-form__button" disabled={isSubmitting}>
-        {isSubmitting ? 'Сохранение...' : 'Добавить товар'}
+        {isSubmitting ? 'Сохранение...' : isEditMode ? 'Сохранить изменения' : 'Добавить товар'}
       </button>
     </form>
   );

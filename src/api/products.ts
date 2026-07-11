@@ -12,6 +12,13 @@ export function createProductRequest(payload: FormData) {
   });
 }
 
+export function updateProductRequest(id: string, payload: FormData) {
+  return apiFetch<Product>(`/api/products/${id}`, {
+    method: 'PUT',
+    body: payload,
+  });
+}
+
 export function deleteProductRequest(id: string) {
   return apiFetch<void>(`/api/products/${id}`, {
     method: 'DELETE',
