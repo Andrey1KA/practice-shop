@@ -8,6 +8,7 @@ import { SignIn } from './pages/SignIn/SignIn';
 import { AddProduct } from './pages/AddProduct/AddProduct';
 import { Profile } from './pages/Profile/Profile';
 import { ProductReviews } from './pages/ProductReviews/ProductReviews';
+import { Payment } from './pages/Payment/Payment';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="product/:id/reviews" element={<ProductReviews />} />
         <Route path="product/:id" element={<Product />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="payment" element={<Payment />} />
         <Route path="profile" element={<Profile />} />
         <Route path="login" element={<SignIn />} />
         <Route path="register" element={<Login />} />

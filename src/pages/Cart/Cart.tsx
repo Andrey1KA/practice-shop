@@ -32,9 +32,9 @@ export function Cart() {
           <button type="button" className="cart-summary__button cart-summary__button--secondary" onClick={clear}>
             Очистить корзину
           </button>
-          <button type="button" className="cart-summary__button">
+          <Link to="/payment" className="cart-summary__button">
             Оформить заказ
-          </button>
+          </Link>
         </div>
       </div>
     </section>
