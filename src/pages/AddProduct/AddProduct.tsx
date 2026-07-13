@@ -1,7 +1,7 @@
 import { Navigate, useNavigate } from 'react-router-dom';
-import { AdminProductForm } from '../../components/product/AdminProductForm';
+import { AdminProductForm } from '../../widgets/product/AdminProductForm/AdminProductForm';
 import { useAuth } from '../../hooks/useAuth';
-import './AddProduct.scss';
+import styles from './AddProduct.module.scss';
 
 export function AddProduct() {
   const navigate = useNavigate();
@@ -12,9 +12,9 @@ export function AddProduct() {
   }
 
   return (
-    <div className="add-product-page">
-      <div className="add-product-card">
-        <h1 className="add-product-card__title">Добавить товар</h1>
+    <div className={styles['add-product-page']}>
+      <div className={styles['add-product-card']}>
+        <h1 className={styles['add-product-card__title']}>Добавить товар</h1>
         <AdminProductForm onSuccess={() => navigate('/catalog')} />
       </div>
     </div>

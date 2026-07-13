@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import './Profile.scss';
+import styles from './Profile.module.scss';
 
 export function Profile() {
   const { user, password, isAuthenticated } = useAuth();
@@ -19,22 +19,26 @@ export function Profile() {
   ];
 
   return (
-    <div className="profile-page">
-      <div className="profile-card">
-        <div className="profile-card__header">
-          <div className="profile-card__avatar">{user.login.charAt(0).toUpperCase()}</div>
-          <h1 className="profile-card__title">{user.login}</h1>
-          <span className={`profile-card__role profile-card__role--${user.role}`}>{roleLabel}</span>
+    <div className={styles['profile-page']}>
+      <div className={styles['profile-card']}>
+        <div className={styles['profile-card__header']}>
+          <div className={styles['profile-card__avatar']}>{user.login.charAt(0).toUpperCase()}</div>
+          <h1 className={styles['profile-card__title']}>{user.login}</h1>
+          <span className={`${styles['profile-card__role']} ${styles[`profile-card__role--${user.role}`]}`}>
+            {roleLabel}
+          </span>
         </div>
 
-        <div className="profile-info">
+        <div className={styles['profile-info']}>
           {fields.map((field) => (
-            <div key={field.label} className="profile-info__row">
-              <span className="profile-info__label">{field.label}</span>
+            <div key={field.label} className={styles['profile-info__row']}>
+              <span className={styles['profile-info__label']}>{field.label}</span>
               {field.isRole ? (
-                <span className={`profile-info__badge profile-info__badge--${user.role}`}>{field.value}</span>
+                <span className={`${styles['profile-info__badge']} ${styles[`profile-info__badge--${user.role}`]}`}>
+                  {field.value}
+                </span>
               ) : (
-                <span className="profile-info__value">{field.value}</span>
+                <span className={styles['profile-info__value']}>{field.value}</span>
               )}
             </div>
           ))}

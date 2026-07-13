@@ -46,6 +46,15 @@
   }
 }
 
+.login-form__input--invalid {
+  border-color: var(--color-danger);
+}
+
+.login-form__field-error {
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
 .login-form__error {
   padding: 10px 12px;
   border-radius: 6px;

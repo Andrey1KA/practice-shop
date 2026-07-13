@@ -1,7 +1,14 @@
 import { useState, type FormEvent } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import './Login.scss';
+import { validateEmail, validateLogin, validatePassword } from '../../utils/validation';
+import styles from './Login.module.scss';
+
+type RegisterFieldErrors = {
+  email?: string;
+  login?: string;
+  password?: string;
+};
 
 export function Login() {
   const navigate = useNavigate();
@@ -9,73 +16,109 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({});
+  const [formError, setFormError] = useState('');
+
+  const clearFieldError = (field: keyof RegisterFieldErrors) => {
+    setFieldErrors((current) => {
+      if (!current[field]) {
+        return current;
+      }
+
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+  };
 
   const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setFormError('');
 
-    if (!email.trim() || !login.trim() || !password.trim()) {
-      setError('Введите email, логин и пароль');
+    const nextFieldErrors: RegisterFieldErrors = {
+      email: validateEmail(email) ?? undefined,
+      login: validateLogin(login) ?? undefined,
+      password: validatePassword(password) ?? undefined,
+    };
+
+    const hasFieldErrors = Object.values(nextFieldErrors).some(Boolean);
+
+    if (hasFieldErrors) {
+      setFieldErrors(nextFieldErrors);
       return;
     }
+
+    setFieldErrors({});
 
     try {
       const isRegistered = await register(email, login, password);
 
       if (!isRegistered) {
-        setError('Пользователь с таким email или логином уже зарегистрирован');
+        setFormError('Пользователь с таким email или логином уже зарегистрирован');
         return;
       }
 
       navigate('/catalog');
     } catch {
-      setError('Не удалось выполнить регистрацию');
+      setFormError('Не удалось выполнить регистрацию');
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <h1 className="login-card__title">Регистрация</h1>
+    <div className={styles['login-page']}>
+      <div className={styles['login-card']}>
+        <h1 className={styles['login-card__title']}>Регистрация</h1>
 
-        <form className="login-form" onSubmit={handleRegister}>
-          <label className="login-form__field">
+        <form className={styles['login-form']} onSubmit={handleRegister} noValidate>
+          <label className={styles['login-form__field']}>
             <span>Email</span>
             <input
-              className="login-form__input"
+              className={`${styles['login-form__input']}${fieldErrors.email ? ` ${styles['login-form__input--invalid']}` : ''}`}
               type="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                clearFieldError('email');
+              }}
             />
+            {fieldErrors.email && <span className={styles['login-form__field-error']}>{fieldErrors.email}</span>}
           </label>
-          <label className="login-form__field">
+          <label className={styles['login-form__field']}>
             <span>Логин</span>
             <input
-              className="login-form__input"
+              className={`${styles['login-form__input']}${fieldErrors.login ? ` ${styles['login-form__input--invalid']}` : ''}`}
               type="text"
               value={login}
-              onChange={(event) => setLogin(event.target.value)}
+              onChange={(event) => {
+                setLogin(event.target.value);
+                clearFieldError('login');
+              }}
             />
+            {fieldErrors.login && <span className={styles['login-form__field-error']}>{fieldErrors.login}</span>}
           </label>
-          <label className="login-form__field">
+          <label className={styles['login-form__field']}>
             <span>Пароль</span>
             <input
-              className="login-form__input"
+              className={`${styles['login-form__input']}${fieldErrors.password ? ` ${styles['login-form__input--invalid']}` : ''}`}
               type="password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                clearFieldError('password');
+              }}
             />
+            {fieldErrors.password && <span className={styles['login-form__field-error']}>{fieldErrors.password}</span>}
           </label>
 
-          {error && <div className="login-form__error">{error}</div>}
+          {formError && <div className={styles['login-form__error']}>{formError}</div>}
 
-          <button type="submit" className="login-form__submit">
+          <button type="submit" className={styles['login-form__submit']}>
             Зарегистрироваться
           </button>
 
-          <div className="login-form__sign-in">
-            <span className="login-form__question">Уже зарегистрированы?</span>
-            <RouterLink to="/login" className="login-form__sign-in-link">
+          <div className={styles['login-form__sign-in']}>
+            <span className={styles['login-form__question']}>Уже зарегистрированы?</span>
+            <RouterLink to="/login" className={styles['login-form__sign-in-link']}>
               Войти
             </RouterLink>
           </div>

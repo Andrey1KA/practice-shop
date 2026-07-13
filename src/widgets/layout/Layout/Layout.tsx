@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { useProducts } from '../../hooks/useProducts';
-import { Header } from './Header';
-import './Layout.scss';
+import { useProducts } from '../../../hooks/useProducts';
+import { Header } from '../Header/Header';
+import styles from './Layout.module.scss';
 
 export function Layout() {
   const { pathname } = useLocation();
@@ -16,9 +16,9 @@ export function Layout() {
   }, [isAuthPage, loadProducts]);
 
   return (
-    <div className="layout">
+    <div className={styles.layout}>
       {!isAuthPage && <Header />}
-      <main className="layout__content">
+      <main className={styles.layout__content}>
         <Outlet />
       </main>
     </div>

@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { Layout } from './components/layout/Layout';
+import { Layout } from './widgets/layout/Layout/Layout';
+import { RequireAuth } from './ui/RequireAuth/RequireAuth';
 import { Catalog } from './pages/Catalog/Catalog';
 import { Product } from './pages/Product/Product';
 import { Cart } from './pages/Cart/Cart';
@@ -15,17 +16,20 @@ function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route index element={<Navigate to="/login" replace />} />
+        <Route index element={<Navigate to="/catalog" replace />} />
         <Route path="catalog" element={<Catalog />} />
-        <Route path="add-product" element={<AddProduct />} />
-        <Route path="product/:id/edit" element={<EditProduct />} />
-        <Route path="product/:id/reviews" element={<ProductReviews />} />
-        <Route path="product/:id" element={<Product />} />
-        <Route path="cart" element={<Cart />} />
-        <Route path="payment" element={<Payment />} />
-        <Route path="profile" element={<Profile />} />
         <Route path="login" element={<SignIn />} />
         <Route path="register" element={<Login />} />
+
+        <Route element={<RequireAuth />}>
+          <Route path="add-product" element={<AddProduct />} />
+          <Route path="product/:id/edit" element={<EditProduct />} />
+          <Route path="product/:id/reviews" element={<ProductReviews />} />
+          <Route path="product/:id" element={<Product />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="payment" element={<Payment />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
       </Route>
     </Routes>
   );

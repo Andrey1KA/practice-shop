@@ -77,6 +77,15 @@
   }
 }
 
+.product-reviews__textarea--invalid {
+  border-color: var(--color-danger);
+}
+
+.product-reviews__field-error {
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
 .product-reviews__submit {
   align-self: flex-start;
   min-height: 40px;

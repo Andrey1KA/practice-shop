@@ -1,11 +1,12 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { createReviewRequest, fetchReviews } from '../../api/reviews';
-import { StarRating } from '../../components/review/StarRating';
+import { StarRating } from '../../ui/StarRating/StarRating';
 import { useAuth } from '../../hooks/useAuth';
 import { useProducts } from '../../hooks/useProducts';
 import type { Review } from '../../types/review';
-import './ProductReviews.scss';
+import { validateReviewComment } from '../../utils/validation';
+import styles from './ProductReviews.module.scss';
 
 function formatReviewDate(value: string) {
   return new Date(value).toLocaleDateString('ru-RU');
@@ -20,6 +21,7 @@ export function ProductReviews() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
+  const [commentError, setCommentError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export function ProductReviews() {
     return (
       <section>
         <p>Товар не найден.</p>
-        <Link to="/catalog" className="product-reviews__back-link">
+        <Link to="/catalog" className={styles['product-reviews__back-link']}>
           Вернуться в каталог
         </Link>
       </section>
@@ -54,10 +56,18 @@ export function ProductReviews() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!id || !comment.trim()) {
+    const nextCommentError = validateReviewComment(comment);
+
+    if (nextCommentError) {
+      setCommentError(nextCommentError);
       return;
     }
 
+    if (!id) {
+      return;
+    }
+
+    setCommentError('');
     setIsSubmitting(true);
 
     try {
@@ -73,65 +83,71 @@ export function ProductReviews() {
   };
 
   return (
-    <section className="product-reviews">
-      <Link to={`/product/${product.id}`} className="product-reviews__back-link">
+    <section className={styles['product-reviews']}>
+      <Link to={`/product/${product.id}`} className={styles['product-reviews__back-link']}>
         ← К товару
       </Link>
 
-      <div className="product-reviews__header">
-        <h1 className="product-reviews__title">Отзывы о «{product.title}»</h1>
+      <div className={styles['product-reviews__header']}>
+        <h1 className={styles['product-reviews__title']}>Отзывы о «{product.title}»</h1>
         {reviews.length > 0 && (
-          <div className="product-reviews__summary">
+          <div className={styles['product-reviews__summary']}>
             <StarRating value={Math.round(averageRating)} readOnly />
-            <span className="product-reviews__summary-text">
+            <span className={styles['product-reviews__summary-text']}>
               {averageRating.toFixed(1)} · {reviews.length} отзывов
             </span>
           </div>
         )}
       </div>
 
-      <form className="product-reviews__form" onSubmit={handleSubmit}>
-        <h2 className="product-reviews__form-title">Оставить отзыв</h2>
+      <form className={styles['product-reviews__form']} onSubmit={handleSubmit} noValidate>
+        <h2 className={styles['product-reviews__form-title']}>Оставить отзыв</h2>
 
-        <div className="product-reviews__field">
+        <div className={styles['product-reviews__field']}>
           <span>Оценка</span>
           <StarRating value={rating} onChange={setRating} />
         </div>
 
-        <label className="product-reviews__field">
+        <label className={styles['product-reviews__field']}>
           <span>Комментарий</span>
           <textarea
-            className="product-reviews__textarea"
+            className={`${styles['product-reviews__textarea']}${commentError ? ` ${styles['product-reviews__textarea--invalid']}` : ''}`}
             value={comment}
-            onChange={(event) => setComment(event.target.value)}
+            onChange={(event) => {
+              setComment(event.target.value);
+              if (commentError) {
+                setCommentError('');
+              }
+            }}
             placeholder="Напишите, что понравилось или не понравилось"
           />
+          {commentError && <span className={styles['product-reviews__field-error']}>{commentError}</span>}
         </label>
 
-        <button type="submit" className="product-reviews__submit" disabled={isSubmitting}>
+        <button type="submit" className={styles['product-reviews__submit']} disabled={isSubmitting}>
           {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
         </button>
       </form>
 
-      <div className="product-reviews__list">
-        <h2 className="product-reviews__list-title">Отзывы пользователей</h2>
+      <div className={styles['product-reviews__list']}>
+        <h2 className={styles['product-reviews__list-title']}>Отзывы пользователей</h2>
 
         {reviews.length === 0 ? (
-          <p className="product-reviews__empty">Пока нет отзывов. Будьте первым.</p>
+          <p className={styles['product-reviews__empty']}>Пока нет отзывов. Будьте первым.</p>
         ) : (
           reviews.map((review) => (
-            <article key={review.id} className="product-reviews__item">
-              <div className="product-reviews__item-header">
+            <article key={review.id} className={styles['product-reviews__item']}>
+              <div className={styles['product-reviews__item-header']}>
                 <div>
-                  <p className="product-reviews__author">
+                  <p className={styles['product-reviews__author']}>
                     {review.userLogin}
                     {review.userLogin === user?.login ? ' (вы)' : ''}
                   </p>
-                  <p className="product-reviews__date">{formatReviewDate(review.createdAt)}</p>
+                  <p className={styles['product-reviews__date']}>{formatReviewDate(review.createdAt)}</p>
                 </div>
                 <StarRating value={review.rating} readOnly />
               </div>
-              <p className="product-reviews__comment">{review.comment}</p>
+              <p className={styles['product-reviews__comment']}>{review.comment}</p>
             </article>
           ))
         )}
